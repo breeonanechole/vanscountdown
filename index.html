@@ -12,12 +12,12 @@
     }
 
     /* 
-      Container: a single row (flex) by default.
-      We'll allow wrapping when on mobile.
+      1) Desktop: a single row for all elements (Days : Hours : Minutes : Seconds)
+      2) We'll let flex-wrap turn on in mobile to move DAYS up on its own line. 
     */
     #countdown-container {
       display: flex;
-      flex-wrap: nowrap;           /* no wrapping on desktop */
+      flex-wrap: nowrap; /* no wrapping on desktop */
       align-items: center;
       justify-content: center;
       font-family: 'SevenSegment', sans-serif;
@@ -27,10 +27,11 @@
       padding: 20px;
       border-radius: 10px;
       width: 100%;
-      max-width: 700px;           /* wide on desktop */
-      margin: 0 auto;             /* center horizontally */
+      max-width: 700px; /* wide on desktop */
+      margin: 0 auto;   /* center horizontally */
     }
 
+    /* Each time section (Days, Hours, Minutes, Seconds) */
     .countdown-section {
       display: flex;
       flex-direction: column;
@@ -38,7 +39,6 @@
       margin: 10px;
     }
 
-    /* Title (Days, Hours, etc.) */
     .countdown-title {
       color: #ffffff;
       font-size: 16px;
@@ -46,7 +46,6 @@
       letter-spacing: 2px;
     }
 
-    /* Big number */
     .countdown-number {
       font-size: 90px;  /* large on desktop */
       background: black;
@@ -55,50 +54,58 @@
       color: #FF0000;
     }
 
-    /* The colons between Hours/Minutes and Minutes/Seconds */
+    /* The colons between H:M and M:S */
     .colon {
       font-size: 90px;
       color: #FF0000;
       margin: 0 10px;
     }
 
-    /* 
-      MEDIA QUERY: 
-      On screens 480px and below:
-        - Wrap the container 
-        - Put Days on its own line 
-        - Shrink fonts to 30px 
-        - Limit container width to 300px 
+    /*
+      2) Mobile (max-width: 480px):
+         - DAYS on its own line
+         - Hide the first colon (before HOURS)
+         - Max container width = 200px
+         - Font size = 40px
+         - Reduce spacing
     */
     @media (max-width: 480px) {
       #countdown-container {
-        flex-wrap: wrap;   /* allows items to break to a new line */
-        max-width: 300px;  /* limit total width on mobile */
-        width: 100%;
+        flex-wrap: wrap;   /* now it can wrap */
+        max-width: 200px;  /* limit container width on mobile */
       }
 
-      /* Days: go first, span full width (its own row) */
+      /* DAYS: take entire width, so it appears on its own line */
       .days-section {
-        order: 0;          /* ensures Days is the first item */
-        width: 100%;       /* pushes it onto its own line */
+        width: 100%;
         margin-bottom: 10px;
         display: flex;
         justify-content: center;
       }
 
-      /* Hours, Minutes, Seconds, and colons follow after Days */
+      /* The first colon (before HOURS) is hidden on mobile */
+      .colon-first {
+        display: none;
+      }
+
+      /* 
+        HOURS, MINUTES, SECONDS + colons show on the next line 
+        (because days is 100% width, they move down)
+      */
       .colon, 
       .hours-section, 
       .minutes-section, 
       .seconds-section {
-        order: 1;          /* appear after Days in the wrapped container */
+        margin: 5px; /* reduce spacing around these items */
       }
 
-      /* Shrink font sizes on mobile */
+      /* Font smaller on mobile */
       .countdown-number,
       .colon {
-        font-size: 30px;   /* smaller display on mobile */
+        font-size: 40px;
+        padding: 5px;
       }
+
       .countdown-title {
         font-size: 12px;
       }
@@ -107,6 +114,7 @@
 </head>
 <body>
 
+  <!-- CONTAINER -->
   <div id="countdown-container">
     <!-- DAYS -->
     <div class="countdown-section days-section">
@@ -114,8 +122,8 @@
       <span id="days" class="countdown-number">000</span>
     </div>
 
-    <!-- Colon -->
-    <div class="colon">:</div>
+    <!-- FIRST COLON (for mobile we hide it via .colon-first) -->
+    <div class="colon colon-first">:</div>
 
     <!-- HOURS -->
     <div class="countdown-section hours-section">
@@ -123,7 +131,7 @@
       <span id="hours" class="countdown-number">00</span>
     </div>
 
-    <!-- Colon -->
+    <!-- Colon between Hours & Minutes -->
     <div class="colon">:</div>
 
     <!-- MINUTES -->
@@ -132,7 +140,7 @@
       <span id="minutes" class="countdown-number">00</span>
     </div>
 
-    <!-- Colon -->
+    <!-- Colon between Minutes & Seconds -->
     <div class="colon">:</div>
 
     <!-- SECONDS -->
@@ -159,10 +167,10 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById('days').textContent = String(days).padStart(3, '0');
-        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        document.getElementById('days').textContent   = String(days).padStart(3, '0');
+        document.getElementById('hours').textContent  = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent= String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent= String(seconds).padStart(2, '0');
       }
 
       const timerInterval = setInterval(updateTimer, 1000);
