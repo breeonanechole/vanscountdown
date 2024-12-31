@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Countdown with Two Rows & Smaller Mobile</title>
+  <title>Countdown</title>
   <style>
     @font-face {
       font-family: 'SevenSegment';
@@ -11,73 +11,93 @@
       font-style: normal;
     }
 
-    /* Container: column layout so "Days" is on top, "Hours : Minutes : Seconds" on second row */
+    /* 
+      Container: a single row (flex) by default.
+      We'll allow wrapping when on mobile.
+    */
     #countdown-container {
       display: flex;
-      flex-direction: column; /* vertical stacking */
+      flex-wrap: nowrap;           /* no wrapping on desktop */
       align-items: center;
       justify-content: center;
       font-family: 'SevenSegment', sans-serif;
       text-align: center;
       color: #FF0000;
-      background-color: #000; /* Black background */
+      background-color: #000;
       padding: 20px;
       border-radius: 10px;
       width: 100%;
-      max-width: 700px;
-      margin: 0 auto; /* centers the container on the page */
-    }
-
-    /* Each row of the countdown (Days row, then Hours:Minutes:Seconds row) */
-    .countdown-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 10px 0;
+      max-width: 700px;           /* wide on desktop */
+      margin: 0 auto;             /* center horizontally */
     }
 
     .countdown-section {
       display: flex;
-      flex-direction: column; /* Title above the number */
+      flex-direction: column;
       align-items: center;
       margin: 10px;
     }
 
+    /* Title (Days, Hours, etc.) */
     .countdown-title {
-      color: #ffffff; /* White for titles */
+      color: #ffffff;
       font-size: 16px;
       margin-bottom: 5px;
       letter-spacing: 2px;
     }
 
+    /* Big number */
     .countdown-number {
-      font-size: 90px; /* Large LCD-style font for desktops */
+      font-size: 90px;  /* large on desktop */
       background: black;
       padding: 10px;
       border-radius: 5px;
-      color: #FF0000;  /* Red */
+      color: #FF0000;
     }
 
-    /* The colon that goes between Hours & Minutes, and Minutes & Seconds */
+    /* The colons between Hours/Minutes and Minutes/Seconds */
     .colon {
       font-size: 90px;
       color: #FF0000;
-      margin: 0 10px;  /* spacing around the colon */
+      margin: 0 10px;
     }
 
     /* 
-      MEDIA QUERY for mobile: 
-      - If you want an even smaller breakpoint, change 768px to something else 
-      - Decrease font size to 25px for .countdown-number and .colon
+      MEDIA QUERY: 
+      On screens 480px and below:
+        - Wrap the container 
+        - Put Days on its own line 
+        - Shrink fonts to 30px 
+        - Limit container width to 300px 
     */
-    @media (max-width: 768px) {
-      .countdown-number {
-        font-size: 25px;
-        padding: 5px;
+    @media (max-width: 480px) {
+      #countdown-container {
+        flex-wrap: wrap;   /* allows items to break to a new line */
+        max-width: 300px;  /* limit total width on mobile */
+        width: 100%;
       }
+
+      /* Days: go first, span full width (its own row) */
+      .days-section {
+        order: 0;          /* ensures Days is the first item */
+        width: 100%;       /* pushes it onto its own line */
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: center;
+      }
+
+      /* Hours, Minutes, Seconds, and colons follow after Days */
+      .colon, 
+      .hours-section, 
+      .minutes-section, 
+      .seconds-section {
+        order: 1;          /* appear after Days in the wrapped container */
+      }
+
+      /* Shrink font sizes on mobile */
+      .countdown-number,
       .colon {
-        font-size: 25px;
-        margin: 0 5px;
+        font-size: 30px;   /* smaller display on mobile */
       }
       .countdown-title {
         font-size: 12px;
@@ -88,39 +108,37 @@
 <body>
 
   <div id="countdown-container">
-    <!-- Row for DAYS -->
-    <div class="countdown-row">
-      <div class="countdown-section">
-        <span class="countdown-title">DAYS</span>
-        <span id="days" class="countdown-number">000</span>
-      </div>
+    <!-- DAYS -->
+    <div class="countdown-section days-section">
+      <span class="countdown-title">DAYS</span>
+      <span id="days" class="countdown-number">000</span>
     </div>
 
-    <!-- Row for HOURS : MINUTES : SECONDS -->
-    <div class="countdown-row">
-      <!-- HOURS -->
-      <div class="countdown-section">
-        <span class="countdown-title">HOURS</span>
-        <span id="hours" class="countdown-number">00</span>
-      </div>
+    <!-- Colon -->
+    <div class="colon">:</div>
 
-      <!-- Colon -->
-      <div class="colon">:</div>
+    <!-- HOURS -->
+    <div class="countdown-section hours-section">
+      <span class="countdown-title">HOURS</span>
+      <span id="hours" class="countdown-number">00</span>
+    </div>
 
-      <!-- MINUTES -->
-      <div class="countdown-section">
-        <span class="countdown-title">MINUTES</span>
-        <span id="minutes" class="countdown-number">00</span>
-      </div>
+    <!-- Colon -->
+    <div class="colon">:</div>
 
-      <!-- Colon -->
-      <div class="colon">:</div>
+    <!-- MINUTES -->
+    <div class="countdown-section minutes-section">
+      <span class="countdown-title">MINUTES</span>
+      <span id="minutes" class="countdown-number">00</span>
+    </div>
 
-      <!-- SECONDS -->
-      <div class="countdown-section">
-        <span class="countdown-title">SECONDS</span>
-        <span id="seconds" class="countdown-number">00</span>
-      </div>
+    <!-- Colon -->
+    <div class="colon">:</div>
+
+    <!-- SECONDS -->
+    <div class="countdown-section seconds-section">
+      <span class="countdown-title">SECONDS</span>
+      <span id="seconds" class="countdown-number">00</span>
     </div>
   </div>
 
