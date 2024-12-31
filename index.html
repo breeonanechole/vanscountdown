@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Countdown with Colons in a Row</title>
+  <title>Responsive Countdown with Colons</title>
   <style>
     @font-face {
       font-family: 'SevenSegment';
@@ -11,36 +11,34 @@
       font-style: normal;
     }
 
-    /* 
-      1) Use flexbox on the container 
-      so all items are on a single row 
-    */
+    /* Countdown Container (Flexbox) */
     #countdown-container {
       display: flex;
       align-items: center;
-      justify-content: center;  /* centers horizontally */
+      justify-content: center;
       font-family: 'SevenSegment', sans-serif;
       text-align: center;
       color: #FF0000; /* Red for numbers */
-      background-color: #000;  /* Black background */
+      background-color: #000; /* Black background */
       padding: 20px;
       border-radius: 10px;
       width: 100%;
-      max-width: 700px; /* Adjust as needed */
-      margin: 0 auto;    /* center the container itself if needed */
+      max-width: 700px;
+      margin: 0 auto;
+      /* margin auto to center container on page if needed */
     }
 
     /* Each time section (Days, Hours, Minutes, Seconds) */
     .countdown-section {
-      display: flex;            /* so the title + number stack vertically */
-      flex-direction: column;   
-      align-items: center;      /* center them horizontally */
+      display: flex; 
+      flex-direction: column; 
+      align-items: center;
       margin: 10px;
     }
 
     /* Title styles (Days, Hours, etc.) */
     .countdown-title {
-      color: #ffffff; /* White for titles */
+      color: #ffffff;
       font-size: 16px;
       margin-bottom: 5px;
       letter-spacing: 2px;
@@ -55,26 +53,28 @@
       color: #FF0000; /* Red */
     }
 
-    /*
-      2) Style for the colon div 
-      (the actual ":" in between Hours and Minutes, etc.)
-    */
+    /* The colon that goes between Hours & Minutes, and Minutes & Seconds */
     .colon {
-      font-size: 90px;  /* match the countdown-number size */
-      color: #FF0000;   /* Red */
-      margin: 0 10px;   /* spacing around the colon */
+      font-size: 90px;
+      color: #FF0000; 
+      margin: 0 10px;
     }
 
-    /* Responsive adjustments */
+    /* 
+       MEDIA QUERY FOR MOBILE 
+       (adjust the max-width as needed)
+    */
     @media (max-width: 768px) {
       .countdown-number {
-        font-size: 60px; /* Adjust for mobile */
+        font-size: 50px;   /* Smaller font for mobile */
+        padding: 5px;      /* Less padding */
       }
       .countdown-title {
-        font-size: 12px; /* Smaller titles for mobile */
+        font-size: 12px;   /* Smaller titles */
       }
       .colon {
-        font-size: 60px; /* smaller colon */
+        font-size: 50px;   /* Smaller colon size */
+        margin: 0 5px;     /* Less horizontal spacing */
       }
     }
   </style>
@@ -87,14 +87,14 @@
       <span class="countdown-title">DAYS</span>
       <span id="days" class="countdown-number">000</span>
     </div>
-
+    
     <!-- HOURS -->
     <div class="countdown-section">
       <span class="countdown-title">HOURS</span>
       <span id="hours" class="countdown-number">00</span>
     </div>
 
-    <!-- Colon after HOURS -->
+    <!-- Colon -->
     <div class="colon">:</div>
 
     <!-- MINUTES -->
@@ -103,7 +103,7 @@
       <span id="minutes" class="countdown-number">00</span>
     </div>
 
-    <!-- Colon after MINUTES -->
+    <!-- Colon -->
     <div class="colon">:</div>
 
     <!-- SECONDS -->
@@ -140,9 +140,10 @@
       updateTimer();
     }
 
-    // Set your target date (YYYY-MM-DD HH:MM:SS format)
+    // Set your target date (YYYY-MM-DD HH:MM:SS)
     const targetDate = new Date("2025-02-01 23:59:59").getTime();
     startCountdown(targetDate);
   </script>
+
 </body>
 </html>
