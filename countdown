@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Countdown with SevenSegment Font</title>
+
+  <style>
+    /* 1. Declare the @font-face */
+    @font-face {
+      font-family: 'SevenSegment';
+      src: url('seven_segment-webfont.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 2. General container styles */
+    #countdown-container {
+      font-family: 'SevenSegment', sans-serif;
+      text-align: center;
+      color: #FF0000; /* Red for numbers */
+      background-color: #000; /* Black background */
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+      width: 100%;
+      max-width: 500px; /* Adjust as needed */
+    }
+
+    /* Title styles (Days, Hours, etc.) */
+    .countdown-title {
+      color: #ffffff; /* White for titles */
+      font-size: 16px;
+      margin-bottom: 5px;
+      letter-spacing: 2px;
+    }
+
+    /* Number styles */
+    .countdown-section {
+      display: inline-block;
+      margin: 10px;
+    }
+
+    .countdown-number {
+      font-size: 90px; /* Large LCD-style font */
+      display: block;
+      background: black;
+      padding: 10px;
+      border-radius: 5px;
+      color: #FF0000; /* Red */
+    }
+
+    @media (max-width: 768px) {
+      .countdown-number {
+        font-size: 60px; /* Adjust for mobile */
+      }
+      .countdown-title {
+        font-size: 12px; /* Smaller titles for mobile */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="countdown-container">
+    <div class="countdown-section">
+      <span class="countdown-title">DAYS</span>
+      <span id="days" class="countdown-number">000</span>
+    </div>
+    <div class="countdown-section">
+      <span class="countdown-title">HOURS</span>
+      <span id="hours" class="countdown-number">00</span>
+    </div>
+    <div class="countdown-section">
+      <span class="countdown-title">MINUTES</span>
+      <span id="minutes" class="countdown-number">00</span>
+    </div>
+    <div class="countdown-section">
+      <span class="countdown-title">SECONDS</span>
+      <span id="seconds" class="countdown-number">00</span>
+    </div>
+  </div>
+
+  <script>
+    function startCountdown(targetDate) {
+      function updateTimer() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+          clearInterval(timerInterval);
+          document.getElementById('countdown-container').innerHTML = "Time's up!";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = String(days).padStart(3, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+      }
+
+      const timerInterval = setInterval(updateTimer, 1000);
+      updateTimer();
+    }
+
+    // Set your target date (YYYY-MM-DD HH:MM:SS format)
+    const targetDate = new Date("2025-02-01 23:59:59").getTime();
+    startCountdown(targetDate);
+  </script>
+</body>
+</html>
