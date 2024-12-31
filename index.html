@@ -12,8 +12,8 @@
     }
 
     /* 
-      1) Desktop: a single row for all elements (Days : Hours : Minutes : Seconds)
-      2) We'll let flex-wrap turn on in mobile to move DAYS up on its own line. 
+      1) Desktop: a single row for all (Days : Hours : Minutes : Seconds)
+      2) On mobile, we move Days onto a separate line and hide the first colon
     */
     #countdown-container {
       display: flex;
@@ -27,8 +27,8 @@
       padding: 20px;
       border-radius: 10px;
       width: 100%;
-      max-width: 700px; /* wide on desktop */
-      margin: 0 auto;   /* center horizontally */
+      max-width: 700px;   /* wide on desktop */
+      margin: 0 auto;     /* center horizontally */
     }
 
     /* Each time section (Days, Hours, Minutes, Seconds) */
@@ -61,18 +61,25 @@
       margin: 0 10px;
     }
 
+    /* We give the first colon a special class so we can hide it on mobile. */
+    .colon-first {
+      font-size: 90px;
+      color: #FF0000;
+      margin: 0 10px;
+    }
+
     /*
       2) Mobile (max-width: 480px):
          - DAYS on its own line
          - Hide the first colon (before HOURS)
-         - Max container width = 200px
-         - Font size = 40px
-         - Reduce spacing
+         - Max container width = 275px
+         - Font size = 30px
+         - Reduce space around colons so they won't force a new line
     */
     @media (max-width: 480px) {
       #countdown-container {
-        flex-wrap: wrap;   /* now it can wrap */
-        max-width: 300px;  /* limit container width on mobile */
+        flex-wrap: wrap;      /* now it can wrap */
+        max-width: 275px;     /* limit container width on mobile */
       }
 
       /* DAYS: take entire width, so it appears on its own line */
@@ -83,27 +90,31 @@
         justify-content: center;
       }
 
-      /* The first colon (before HOURS) is hidden on mobile */
+      /* Hide the first colon on mobile */
       .colon-first {
         display: none;
       }
 
-      /* 
-        HOURS, MINUTES, SECONDS + colons show on the next line 
-        (because days is 100% width, they move down)
+      /*
+        For Hours, Minutes, Seconds, and their colons:
+        - reduce margins so they don't break to next line
       */
-      .colon, 
-      .hours-section, 
-      .minutes-section, 
-      .seconds-section {
-        margin: 2px; /* reduce spacing around these items */
+      .hours-section,
+      .minutes-section,
+      .seconds-section,
+      .colon {
+        margin: 5px 2px; /* tighter spacing */
       }
 
-      /* Font smaller on mobile */
+      /* Shrink font sizes on mobile */
       .countdown-number,
       .colon {
-        font-size: 30px;
-        padding: 2px;
+        font-size: 30px; 
+      }
+
+      /* Can also reduce padding on the countdown-number if you like */
+      .countdown-number {
+        padding: 5px; 
       }
 
       .countdown-title {
@@ -122,8 +133,8 @@
       <span id="days" class="countdown-number">000</span>
     </div>
 
-    <!-- FIRST COLON (for mobile we hide it via .colon-first) -->
-    <div class="colon colon-first">:</div>
+    <!-- FIRST COLON (hidden on mobile) -->
+    <div class="colon-first">:</div>
 
     <!-- HOURS -->
     <div class="countdown-section hours-section">
@@ -177,7 +188,7 @@
       updateTimer();
     }
 
-    // Set your target date (YYYY-MM-DD HH:MM:SS format)
+    // Set your target date
     const targetDate = new Date("2025-02-01 23:59:59").getTime();
     startCountdown(targetDate);
   </script>
