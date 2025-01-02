@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Countdown</title>
+  <title>Countdown (One-Line, Responsive)</title>
   <style>
     @font-face {
       font-family: 'SevenSegment';
@@ -11,151 +11,118 @@
       font-style: normal;
     }
 
-    /* 
-      1) Desktop: a single row for all (Days : Hours : Minutes : Seconds)
-      2) On mobile, we move Days onto a separate line and hide the first colon
-    */
+    /* Container: one line, no wrap, center everything */
     #countdown-container {
       display: flex;
-      flex-wrap: nowrap; /* no wrapping on desktop */
       align-items: center;
       justify-content: center;
+      flex-wrap: nowrap;          /* always one line */
       font-family: 'SevenSegment', sans-serif;
       text-align: center;
-      color: #FF0000;
-      background-color: #000;
+      background-color: #000;     /* Black background */
+      color: #FF0000;            /* Red numbers */
       padding: 20px;
       border-radius: 10px;
       width: 100%;
-      max-width: 700px;   /* wide on desktop */
-      margin: 0 auto;     /* center horizontally */
+      max-width: 100%;           /* ensure it doesn't exceed screen width */
+      overflow: hidden;          /* hide any potential overflow */
+      box-sizing: border-box;     /* so padding doesn't add extra width */
+      margin: 0 auto;
     }
 
     /* Each time section (Days, Hours, Minutes, Seconds) */
     .countdown-section {
-      display: flex;
+      display: flex;             /* so title is above the number */
       flex-direction: column;
       align-items: center;
-      margin: 10px;
+      margin: 0 10px;            /* spacing left/right */
     }
 
+    /* Title styles (Days, Hours, etc.) */
     .countdown-title {
-      color: #ffffff;
+      color: #ffffff;            /* White for titles */
       font-size: 16px;
       margin-bottom: 5px;
       letter-spacing: 2px;
     }
 
+    /* Number styles */
     .countdown-number {
-      font-size: 90px;  /* large on desktop */
+      font-size: 90px;           /* Large LCD-style font on desktop */
       background: black;
       padding: 10px;
       border-radius: 5px;
       color: #FF0000;
     }
 
-    /* The colons between H:M and M:S */
+    /* Colon between each section */
     .colon {
       font-size: 90px;
       color: #FF0000;
-      margin: 0 10px;
+      margin: 0 10px;            /* spacing around the colon */
     }
 
-    /* We give the first colon a special class so we can hide it on mobile. */
-    .colon-first {
-      font-size: 90px;
-      color: #FF0000;
-      margin: 0 10px;
-    }
-
-    /*
-      2) Mobile (max-width: 480px):
-         - DAYS on its own line
-         - Hide the first colon (before HOURS)
-         - Max container width = 275px
-         - Font size = 30px
-         - Reduce space around colons so they won't force a new line
-    */
+    /* MEDIA QUERY: 480px and below */
     @media (max-width: 480px) {
       #countdown-container {
-        flex-wrap: wrap;      /* now it can wrap */
-        max-width: 275px;     /* limit container width on mobile */
+        padding: 10px;           /* less padding overall */
       }
 
-      /* DAYS: take entire width, so it appears on its own line */
-      .days-section {
-        width: 100%;
-        margin-bottom: 10px;
-        display: flex;
-        justify-content: center;
-      }
-
-      /* Hide the first colon on mobile */
-      .colon-first {
-        display: none;
-      }
-
-      /*
-        For Hours, Minutes, Seconds, and their colons:
-        - reduce margins so they don't break to next line
-      */
-      .hours-section,
-      .minutes-section,
-      .seconds-section,
-      .colon {
-        margin: 5px 2px; /* tighter spacing */
-      }
-
-      /* Shrink font sizes on mobile */
+      /* Make everything smaller so it all fits on one line */
       .countdown-number,
       .colon {
-        font-size: 30px; 
+        font-size: 30px;         /* shrink from 90px to 30px */
       }
 
-      /* Can also reduce padding on the countdown-number if you like */
       .countdown-number {
-        padding: 5px; 
+        padding: 5px;            /* tighter padding */
       }
 
       .countdown-title {
-        font-size: 12px;
+        font-size: 12px;         /* smaller title text */
+        margin-bottom: 2px;
+      }
+
+      /* Reduce margin between sections/colons */
+      .countdown-section,
+      .colon {
+        margin: 0 4px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- CONTAINER -->
   <div id="countdown-container">
     <!-- DAYS -->
-    <div class="countdown-section days-section">
+    <div class="countdown-section">
       <span class="countdown-title">DAYS</span>
       <span id="days" class="countdown-number">000</span>
     </div>
 
-    <!-- FIRST COLON (hidden on mobile) -->
-    <div class="colon-first">:</div>
+    <!-- Colon -->
+    <div class="colon">:</div>
 
     <!-- HOURS -->
-    <div class="countdown-section hours-section">
+    <div class="countdown-section">
       <span class="countdown-title">HOURS</span>
       <span id="hours" class="countdown-number">00</span>
     </div>
 
-    <!-- Colon between Hours & Minutes -->
+    <!-- Colon -->
     <div class="colon">:</div>
 
     <!-- MINUTES -->
-    <div class="countdown-section minutes-section">
+    <div class="countdown-section">
       <span class="countdown-title">MINUTES</span>
       <span id="minutes" class="countdown-number">00</span>
     </div>
 
-    <!-- Colon between Minutes & Seconds -->
+    <!-- Colon -->
     <div class="colon">:</div>
 
     <!-- SECONDS -->
-    <div class="countdown-section seconds-section">
+    <div class="countdown-section">
       <span class="countdown-title">SECONDS</span>
       <span id="seconds" class="countdown-number">00</span>
     </div>
@@ -178,20 +145,19 @@
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById('days').textContent   = String(days).padStart(3, '0');
-        document.getElementById('hours').textContent  = String(hours).padStart(2, '0');
-        document.getElementById('minutes').textContent= String(minutes).padStart(2, '0');
-        document.getElementById('seconds').textContent= String(seconds).padStart(2, '0');
+        document.getElementById('days').textContent    = String(days).padStart(3, '0');
+        document.getElementById('hours').textContent   = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
       }
 
       const timerInterval = setInterval(updateTimer, 1000);
       updateTimer();
     }
 
-    // Set your target date
-    const targetDate = new Date("2025-01-27 23:59:59").getTime();
+    // Target date (YYYY-MM-DD HH:MM:SS)
+    const targetDate = new Date("2025-02-01 23:59:59").getTime();
     startCountdown(targetDate);
   </script>
-
 </body>
 </html>
